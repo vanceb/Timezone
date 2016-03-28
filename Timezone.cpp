@@ -9,7 +9,6 @@
  * San Francisco, California, 94105, USA.                               *
  *----------------------------------------------------------------------*/
 
-#include <avr/eeprom.h>
 #include "Timezone.h"
 
 /*----------------------------------------------------------------------*
@@ -19,15 +18,6 @@ Timezone::Timezone(TimeChangeRule dstStart, TimeChangeRule stdStart)
 {
     _dst = dstStart;
     _std = stdStart;
-}
-
-/*----------------------------------------------------------------------*
- * Create a Timezone object from time change rules stored in EEPROM     *
- * at the given address.                                                *
- *----------------------------------------------------------------------*/
-Timezone::Timezone(int address)
-{
-    readRules(address);
 }
 
 /*----------------------------------------------------------------------*
@@ -174,26 +164,4 @@ time_t Timezone::toTime_t(TimeChangeRule r, int yr)
     t += (7 * (w - 1) + (r.dow - weekday(t) + 7) % 7) * SECS_PER_DAY;
     if (r.week == 0) t -= 7 * SECS_PER_DAY;    //back up a week if this is a "Last" rule
     return t;
-}
-
-/*----------------------------------------------------------------------*
- * Read the daylight and standard time rules from EEPROM at				*
- * the given address.                                                   *
- *----------------------------------------------------------------------*/
-void Timezone::readRules(int address)
-{
-    eeprom_read_block((void *) &_dst, (void *) address, sizeof(_dst));
-    address += sizeof(_dst);
-    eeprom_read_block((void *) &_std, (void *) address, sizeof(_std));
-}
-
-/*----------------------------------------------------------------------*
- * Write the daylight and standard time rules to EEPROM at				*
- * the given address.                                                   *
- *----------------------------------------------------------------------*/
-void Timezone::writeRules(int address)
-{
-    eeprom_write_block((void *) &_dst, (void *) address, sizeof(_dst));
-    address += sizeof(_dst);
-    eeprom_write_block((void *) &_std, (void *) address, sizeof(_std));
 }
