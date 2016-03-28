@@ -1,3 +1,7 @@
+# Forked
+
+Forked to remove eeprom code as eeprom library not yet ported to ESP8266
+
 #Arduino Timezone Library v1.0
 https://github.com/JChristensen/Timezone  
 ReadMe file  
